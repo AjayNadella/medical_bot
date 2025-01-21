@@ -10,7 +10,7 @@ class Chain:
     def __init__(self):
         self.llm = ChatGroq(
             temperature=0,
-            groq_api_key="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",
+            groq_api_key="your_api_key",
             model_name="llama-3.1-70b-versatile"
         )
 
@@ -66,4 +66,4 @@ class Chain:
         return answer
 
 if __name__ == "__main__":
-    print("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")
+    print("your_api_key")
