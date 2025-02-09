@@ -43,20 +43,20 @@ jobs:
     - name: Set Up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
       with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        project_id: ${{ secrets.project_id }}
 
     - name: Configure Docker for GCP
       run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
     - name: Build & Push Docker Image
       run: |
-        docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/medical-bot-repo/medical-bot:latest .
-        docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/medical-bot-repo/medical-bot:latest
+        docker build -t us-central1-docker.pkg.dev/${{ secrets.project_id }}/medical-bot-repo/medical-bot:latest .
+        docker push us-central1-docker.pkg.dev/${{ secrets.project_id }}/medical-bot-repo/medical-bot:latest
 
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy medical-bot \
-          --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/medical-bot-repo/medical-bot:latest \
+          --image=us-central1-docker.pkg.dev/${{ secrets.project_id }}/medical-bot-repo/medical-bot:latest \
           --platform=managed \
           --region=us-central1 \
           --allow-unauthenticated \
