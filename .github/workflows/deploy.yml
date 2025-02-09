@@ -1,0 +1,67 @@
+name: CI/CD Pipeline for Medical Bot
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  build-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3  
+
+    - name: Set Up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.10
+
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+
+    - name: Lint Code
+      run: |
+        pip install flake8
+        flake8 --ignore=E501 .  
+
+    - name: Run Tests
+      run: echo "No tests yet. Add pytest for unit testing."
+
+  deploy:
+    name: Deploy to Cloud Run
+    runs-on: ubuntu-latest
+    needs: build-test  
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3  
+
+    - name: Authenticate with GCP
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+    - name: Set Up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Configure Docker for GCP
+      run: gcloud auth configure-docker us-central1-docker.pkg.dev
+
+    - name: Build & Push Docker Image
+      run: |
+        docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/medical-bot-repo/medical-bot:latest .
+        docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/medical-bot-repo/medical-bot:latest
+
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy medical-bot \
+          --image=us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/medical-bot-repo/medical-bot:latest \
+          --platform=managed \
+          --region=us-central1 \
+          --allow-unauthenticated \
+          --set-env-vars="GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}"
