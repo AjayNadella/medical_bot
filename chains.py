@@ -6,11 +6,17 @@ from langchain.chains import RetrievalQA
 from chromadb.config import Settings
 import chromadb
 
+
+groq_api_key = os.getenv("GROQ_API_KEY")
+
+if not groq_api_key:
+    raise ValueError("API Key is missing! Set the GROQ_API_KEY environment variable.")
+
 class Chain:
     def __init__(self):
         self.llm = ChatGroq(
             temperature=0,
-            groq_api_key="your_api_key",
+            groq_api_key=groq_api_key,  
             model_name="llama-3.1-70b-versatile"
         )
 
@@ -66,4 +72,5 @@ class Chain:
         return answer
 
 if __name__ == "__main__":
-    print("your_api_key")
+    print(f"Loaded API Key: {groq_api_key[:5]}********") 
+
