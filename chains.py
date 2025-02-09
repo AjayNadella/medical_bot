@@ -17,7 +17,7 @@ class Chain:
         self.llm = ChatGroq(
             temperature=0,
             groq_api_key=groq_api_key,  
-            model_name="llama-3.1-70b-versatile"
+            model_name="deepseek-r1-distill-llama-70b"
         )
 
         self.client = chromadb.PersistentClient(path="./chroma_db_backup")
