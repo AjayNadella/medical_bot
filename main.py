@@ -7,9 +7,9 @@ st.title("Medical Bot: Women's Health and Pregnancy Assistant")
 st.markdown("Ask any questions about women's health or pregnancy, and I'll provide accurate and empathetic answers.")
 
 # User Input
-user_question = st.text_area("Enter your question here:")
+user_question = st.text_area("Ask Anything realted to your Pregnancy health:")
 
-if st.button("Get Answer"):
+if st.button("click me to get the answer"):
     if user_question.strip():
         with st.spinner("Fetching answer..."):
             try:
