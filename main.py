@@ -3,7 +3,7 @@ from chains import Chain
 
 bot = Chain()
 
-st.title("Medical Bot: Women's Health and Pregnancy Assistant")
+st.title("Medical Bot for Women's Health and Pregnancy")
 st.markdown("Ask any questions about women's health or pregnancy, and I'll provide accurate and empathetic answers.")
 
 # User Input
